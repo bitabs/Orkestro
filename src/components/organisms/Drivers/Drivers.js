@@ -3,6 +3,7 @@ import Fetch from "components/pages/Dashboard/Fetch";
 import GPS from 'fake_gps.csv'
 import Card from "components/molecules/Card";
 import Driver from "components/molecules/Driver";
+import Map from "components/molecules/Map";
 
 class Drivers extends Component {
   state = {}
@@ -39,6 +40,9 @@ class Drivers extends Component {
                     />
                   )
                 })}
+              </Card>
+              <Card>
+                <Map drivers={results}/>
               </Card>
             </>
           )
