@@ -1,0 +1,12 @@
+.default {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background-color: #f6f5f8;
+
+  a {
+    text-transform: none;
+    text-decoration: none;
+  }
+}
