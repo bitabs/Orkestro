@@ -2,6 +2,8 @@ import React from 'react'
 import {GoogleMap, Marker, withGoogleMap, withScriptjs} from 'react-google-maps'
 import { compose, withProps, lifecycle } from 'recompose'
 import './Map.scss'
+import driver from 'assets/icons/map_pin.png'
+
 const API_KEY = "AIzaSyC3gLflvXVEGLuOS_1pA6eeQQ4ocguzTlE"
 const Map = compose(
   withProps({
@@ -19,8 +21,9 @@ const Map = compose(
   })
 )(props =>
   <GoogleMap
-    defaultZoom={10}
+    defaultZoom={13}
     defaultCenter={new window.google.maps.LatLng(51.509865, -0.118092)}
+    center={new window.google.maps.LatLng(props.lat, props.lon)}
     defaultOptions={{
       fullscreenControl: false,
       mapTypeControl: false,
@@ -37,6 +40,16 @@ const Map = compose(
         />
       )
     })}
+
+    {props.img && (
+      <Marker
+        defaultIcon={{
+          url: driver,
+          scaledSize: new window.google.maps.Size(30, 40)
+        }}
+        position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon) }}
+      />
+    )}
   </GoogleMap>
 );
 
