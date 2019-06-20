@@ -1,29 +1,81 @@
 import React, { Component } from 'react'
 import Fetch from "components/pages/Dashboard/Fetch";
-import GPS from 'fake_gps.csv'
 import Card from "components/molecules/Card";
 import Driver from "components/molecules/Driver";
-import Map from "components/molecules/Map";
 
 class Drivers extends Component {
   state = {
-    selectedLat: 51.509865,
-    selectedLong: -0.118092,
-    selectedDriver: ""
+    gps: void 0,
+    drivers: void 0
   }
 
-  componentDidMount() {}
+  async componentDidMount() {
+    const
+      { drivers, gps }  = this.props,
+      cords             = gps.split('\n')
 
-  onClick = ({...props}) => {
+    for (let i = 0; i < cords.length; i++) {
+      const [lat, lon] = cords[i].split(',')
+      drivers[i].location.coordinates.latitude = lat
+      drivers[i].location.coordinates.longitude = lon
+    }
+
     this.setState({
-      selectedLat: props.location.coordinates.latitude,
-      selectedLon: props.location.coordinates.longitude,
-      selectedDriver: props.picture.large
+      gps,
+      drivers: drivers
     })
-    console.log("Hell clicked", props)
   }
 
   render() {
+    const
+      { onSelectedDriver } = this.props,
+      { drivers } = this.state
+
+    return (
+      <Card style={{overflowY: "scroll"}}>
+        {drivers && [...Array(10).keys()].map((driver, i) => {
+          const {...props} = drivers[driver]
+          return (
+            <Driver
+              key={i}
+              {...props}
+              onSelectedDriver={onSelectedDriver}
+            />
+          )
+        })}
+
+      </Card>
+    )
+  }
+
+}
+
+export default Drivers
+
+/**
+ return (
+ <>
+ <Card style={{overflowY: "scroll"}}>
+ {[...Array(10).keys()].map((driver, i) => {
+                  const {...props} = results[driver]
+                  return (
+                    <Driver
+                      key={i}
+                      {...props}
+                      onClick={this.onClick}
+                    />
+                  )
+                })}
+ </Card>
+
+
+
+
+
+
+
+
+ render() {
     return (
       <Fetch
         url={GPS}
@@ -39,8 +91,6 @@ class Drivers extends Component {
             results[i].location.coordinates.longitude = coords[1]
           }
 
-          console.log(data)
-
           return (
             <>
               <Card style={{overflowY: "scroll"}}>
@@ -55,14 +105,6 @@ class Drivers extends Component {
                   )
                 })}
               </Card>
-              <Card>
-                <Map
-                  drivers={results}
-                  img={this.state.selectedDriver}
-                  lat={this.state.selectedLat}
-                  lon={this.state.selectedLong}
-                />
-              </Card>
             </>
           )
         }}
@@ -71,6 +113,18 @@ class Drivers extends Component {
       />
     )
   }
-}
 
-export default Drivers
+
+
+
+
+ <Card>
+ <Map
+ drivers={results}
+ img={this.state.selectedDriver}
+ lat={this.state.selectedLat}
+ lon={this.state.selectedLong}
+ />
+ </Card>
+ </>
+ )*/

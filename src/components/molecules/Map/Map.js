@@ -2,7 +2,7 @@ import React from 'react'
 import {GoogleMap, Marker, withGoogleMap, withScriptjs} from 'react-google-maps'
 import { compose, withProps, lifecycle } from 'recompose'
 import './Map.scss'
-import driver from 'assets/icons/map_pin.png'
+import pin from 'assets/icons/pin.svg'
 
 const API_KEY = "AIzaSyC3gLflvXVEGLuOS_1pA6eeQQ4ocguzTlE"
 const Map = compose(
@@ -15,15 +15,12 @@ const Map = compose(
   withScriptjs,
   withGoogleMap,
   lifecycle({
-    componentDidMount() {
-      console.log(this.props)
-    }
   })
 )(props =>
   <GoogleMap
-    defaultZoom={13}
+    defaultZoom={10}
     defaultCenter={new window.google.maps.LatLng(51.509865, -0.118092)}
-    center={new window.google.maps.LatLng(props.lat, props.lon)}
+    center={new window.google.maps.LatLng(props.orderLat || 51.509865, props.orderLon || -0.118092)}
     defaultOptions={{
       fullscreenControl: false,
       mapTypeControl: false,
@@ -31,7 +28,18 @@ const Map = compose(
       streetViewControl: false
     }}
   >
-    {props.drivers.map((driver, i) => {
+
+    {props.orderLat && props.orderLon && (
+      <Marker
+        defaultIcon={{
+          url: pin,
+          scaledSize: new window.google.maps.Size(30, 40)
+        }}
+        position={{ lat: parseFloat(props.orderLat), lng: parseFloat(props.orderLon) }}
+      />
+    )}
+
+    {props.closestDrivers && props.closestDrivers.map((driver, i) => {
       const {latitude, longitude} = driver.location.coordinates
       return (
         <Marker
@@ -41,31 +49,16 @@ const Map = compose(
       )
     })}
 
-    {props.img && (
-      <Marker
-        defaultIcon={{
-          url: driver,
-          scaledSize: new window.google.maps.Size(30, 40)
-        }}
-        position={{ lat: parseFloat(props.lat), lng: parseFloat(props.lon) }}
-      />
-    )}
+    {!props.closestDrivers && props.drivers.map((driver, i) => {
+      const {latitude, longitude} = driver.location.coordinates
+      return (
+        <Marker
+          key={i}
+          position={{ lat: parseFloat(latitude), lng: parseFloat(longitude) }}
+        />
+      )
+    })}
   </GoogleMap>
 );
-
-// const Map = withScriptjs(withGoogleMap(props => (
-//   <GoogleMap
-//     defaultZoom={13}
-//     defaultCenter={{ lat: 51.509865, lng: -0.118092 }}
-//   >
-//     {props.isMarkerShown && <Marker
-//       defaultIcon={{
-//         url: pin,
-//         scaledSize: new window.google.maps.Size(100, 50)
-//       }}
-//       position={{ lat: 51.509865, lng: -0.118092 }}
-//     />}
-//   </GoogleMap>
-// )));
 
 export default Map;

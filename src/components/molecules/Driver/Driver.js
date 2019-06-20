@@ -1,16 +1,13 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './Driver.scss'
 
-const Driver = ({onClick, ...props}) => {
-  console.log(props)
-
+const Driver = ({onSelectedDriver, ...props}) => {
   const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
-
   return (
-    <div className="driver" onClick={() => onClick({...props})}>
+    <div className="driver" onClick={() => onSelectedDriver({...props})}>
       <div className="driver__img-container">
         <img src={props.picture.large} alt=""/>
       </div>
