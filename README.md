@@ -7,6 +7,9 @@ the google map.
 Note, running this project locally, you won't be able to load google map with my API Key as it's restricted to only 
 certain domains. Should you wish to load google map locally, change my API Key to your API key.
 
+The application is deployed to Netlify and can be viewed here:
+
+# [Orkestro](https://orkestro.netlify.com)
 
 ## Available Scripts
 
