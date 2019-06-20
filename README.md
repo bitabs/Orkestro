@@ -11,6 +11,8 @@ The application is deployed to Netlify and can be viewed here:
 
 # [Orkestro](https://orkestro.netlify.com)
 
+![alt text](https://github.com/NaseebullahSafi/Orkestro/blob/master/Orkestro_img.png)
+
 ## Available Scripts
 
 In the project directory, you can run:
