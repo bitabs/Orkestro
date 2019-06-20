@@ -1,6 +1,21 @@
 import React from 'react'
 import './Order.scss'
 
+/**
+ * Order component representing individual order.
+ * @param title
+ * @param paragraph
+ * @param pickupTime
+ * @param pickupAddress
+ * @param width
+ * @param height
+ * @param depth
+ * @param lat
+ * @param lon
+ * @param onClick
+ * @returns {*}
+ * @constructor
+ */
 const Order = ({title, paragraph, pickupTime, pickupAddress, width, height, depth, lat, lon, onClick}) => (
   <div className="order" onClick={() => onClick({lat, lon})}>
     <div className="order__package-icon">

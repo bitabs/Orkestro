@@ -1,21 +1,25 @@
 import React, { Component } from "react"
 import Default from 'components/templates/Default'
-import Fetch from "./Fetch";
 import Drivers from "components/organisms/Drivers"
-import GPS from 'fake_gps.csv'
-import Orders from "../../organisms/Orders";
+import Orders from "components/organisms/Orders"
+import Card from "components/molecules/Card"
+import Map from "components/molecules/Map"
 import OrdersData from 'fake_order.json'
-import Map from "components/molecules/Map";
-import Card from "components/molecules/Card";
+import GPS from 'fake_gps.csv'
+import Fetch from "./Fetch"
 
+/**
+ * Dashboard component holds the entire 3 main main parts of the page, namely,
+ * the users card, orders card and google map
+ */
 class Dashboard extends Component {
+  // our local state object
   state = {
-    drivers: void 0,
+    // will hold a list of users (drivers)
+    drivers: void 0, // we use `void 0` instead of undefined because you can init values to undefined
+    // will hold the k closest drivers to a given origin
     closestDrivers: void 0,
-    selectedDriver: {
-      lat: void 0,
-      lon: void 0
-    },
+    // will hold the selected order
     selectedOrder: {
       lat: void 0,
       lon: void 0
@@ -23,30 +27,31 @@ class Dashboard extends Component {
   }
 
   async componentDidMount() {
+    // we're using Randomusers.me api for mock user's data and some fake GPS in the form of (lat, lon)
     const
       drivers = await Fetch("https://randomuser.me/api?nat=gb&results=246", 'json'),
       gps = await Fetch(GPS, 'text')
 
+    // save them to our local component state
     this.setState({
       drivers: drivers.results,
       gps
     })
   }
 
-  selectedDriver = ({...props}) => this.setState({
-    selectedDriver: {
-      lat: props.location.coordinates.latitude,
-      lon: props.location.coordinates.longitude
-    }
-  })
-
+  /**
+   * When the user clicks on a order, we need to propagate that order from child component (<Order >) to parent
+   * component (Dashboard), so that we can pass it to google map to update the marker.
+   * @param lat
+   * @param lon
+   */
   selectedOrder = ({lat, lon}) => this.setState({
+    // we need to recalculate the closest distance based on the current selected order
     closestDrivers: this.closest(this.state.drivers, [lat, lon], 4),
     selectedOrder: {
       lat, lon
     }
   })
-
 
   /**
    * KClosest algorithm: Given an array of (lat, lon) [1..n], and an origin,
@@ -83,7 +88,6 @@ class Dashboard extends Component {
           <Drivers
             drivers={drivers}
             gps={gps}
-            onSelectedDriver={this.selectedDriver}
           />
         )}
 

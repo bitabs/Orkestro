@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import Fetch from "components/pages/Dashboard/Fetch";
-import Card from "components/molecules/Card";
-import Driver from "components/molecules/Driver";
+import Driver from "components/molecules/Driver"
+import Card from "components/molecules/Card"
 
+/**
+ * This component is a container that holds drivers component.
+ * We separate this component from individual driver
+ */
 class Drivers extends Component {
   state = {
     gps: void 0,
@@ -14,8 +17,13 @@ class Drivers extends Component {
       { drivers, gps }  = this.props,
       cords             = gps.split('\n')
 
+    // this is only a p.o.c (proof of concept). In a real world, I should have
+    // the correct coordinates from an api.
     for (let i = 0; i < cords.length; i++) {
+      // separate the lat and and lon from cords[i]
       const [lat, lon] = cords[i].split(',')
+      // the coordinates from Randomuser api are anywhere in the word, inc. ocean,
+      // which is wrong. So I'm only filtering the drivers around the UK
       drivers[i].location.coordinates.latitude = lat
       drivers[i].location.coordinates.longitude = lon
     }
@@ -27,23 +35,15 @@ class Drivers extends Component {
   }
 
   render() {
-    const
-      { onSelectedDriver } = this.props,
-      { drivers } = this.state
+    const { drivers } = this.state
+    // I'm only capping users to 30, but one can increase it.
 
     return (
       <Card style={{overflowY: "scroll"}}>
-        {drivers && [...Array(10).keys()].map((driver, i) => {
+        {drivers && [...Array(30).keys()].map((driver, i) => {
           const {...props} = drivers[driver]
-          return (
-            <Driver
-              key={i}
-              {...props}
-              onSelectedDriver={onSelectedDriver}
-            />
-          )
+          return (<Driver key={i} {...props} />)
         })}
-
       </Card>
     )
   }
@@ -51,80 +51,3 @@ class Drivers extends Component {
 }
 
 export default Drivers
-
-/**
- return (
- <>
- <Card style={{overflowY: "scroll"}}>
- {[...Array(10).keys()].map((driver, i) => {
-                  const {...props} = results[driver]
-                  return (
-                    <Driver
-                      key={i}
-                      {...props}
-                      onClick={this.onClick}
-                    />
-                  )
-                })}
- </Card>
-
-
-
-
-
-
-
-
- render() {
-    return (
-      <Fetch
-        url={GPS}
-        parseFormat={"text"}
-        success={(data) => {
-          const
-            { results } = this.props.data,
-            decode = data.split('\n')
-
-          for (let i = 0; i < decode.length; i++) {
-            const coords = decode[i].split(',')
-            results[i].location.coordinates.latitude = coords[0]
-            results[i].location.coordinates.longitude = coords[1]
-          }
-
-          return (
-            <>
-              <Card style={{overflowY: "scroll"}}>
-                {[...Array(10).keys()].map((driver, i) => {
-                  const {...props} = results[driver]
-                  return (
-                    <Driver
-                      key={i}
-                      {...props}
-                      onClick={this.onClick}
-                    />
-                  )
-                })}
-              </Card>
-            </>
-          )
-        }}
-        loading={(loading) => <h1>{loading}</h1>}
-        error={(err) => <h1>{err}</h1>}
-      />
-    )
-  }
-
-
-
-
-
- <Card>
- <Map
- drivers={results}
- img={this.state.selectedDriver}
- lat={this.state.selectedLat}
- lon={this.state.selectedLong}
- />
- </Card>
- </>
- )*/

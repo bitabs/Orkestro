@@ -1,21 +1,26 @@
 import React from 'react'
 import './Driver.scss'
 
-const Driver = ({onSelectedDriver, ...props}) => {
+/**
+ * This stateless functional component represents individual driver. It doesn't have any logic,
+ * and only represents the data fed from the props
+ * @param props
+ * @returns {*}
+ * @constructor
+ */
+const Driver = ({...props}) => {
   const capitalize = (str) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   }
 
   return (
-    <div className="driver" onClick={() => onSelectedDriver({...props})}>
+    <div className="driver">
       <div className="driver__img-container">
         <img src={props.picture.large} alt=""/>
       </div>
 
       <div className="driver__info">
         <h1>{capitalize(props.name.title)}. {capitalize(props.name.first)} {capitalize(props.name.last)}</h1>
-
-
         <div className="driver__details">
           <span className="driver__email">
             <svg
